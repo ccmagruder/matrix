@@ -299,7 +299,7 @@ class OperatorSet{
     // Deep Copy Assignment: A = B
     // Disabled to avoid accidental copy assignment
     // Use copy operator instead (e.g. A = Matrix(B))
-    T& operator=(const T& B) = delete;
+    // T& operator=(const T& B) = delete;
 
     // Number of elements (rows * cols)
     friend const ptrdiff_t numel(const OperatorSet<T>& A) {

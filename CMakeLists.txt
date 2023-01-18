@@ -9,6 +9,8 @@ include(CTest)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 set(CMAKE_BUILD_TYPE Debug)
 
 option(LINT "Run cpplint and cppcheck linting" OFF)
@@ -26,6 +28,7 @@ if (${LINT})
 endif (${LINT})
 
 add_subdirectory(extern)
+add_subdirectory(tests)
 
 add_library(Matrix SHARED ${CMAKE_SOURCE_DIR}/src/Matrix.cpp)
 

@@ -32,6 +32,11 @@ class Matrix : public OperatorSet<Matrix<T>> {
 
     using OperatorSet<Matrix<T>>::operator=;
 
+    // Deep Copy Assignment: A = B
+    // Disabled to avoid accidental copy assignment
+    // Use copy operator instead (e.g. A = Matrix(B))
+    Matrix<T>& operator=(const Matrix<T>& B) = delete;
+
     // Random matrix generator
     static Matrix<T> randn(ptrdiff_t m, ptrdiff_t n = 1) {
         Matrix<T> A(m, n);
@@ -85,26 +90,28 @@ class Matrix : public OperatorSet<Matrix<T>> {
         return d(gen);
     }
 
+    class Ptr;
 };
 
-    // Matrix Pointer -> Ctor / Dtor Does Not Allocate / Deallocate 
-    template<BLAS T>
-    class Ptr : public Matrix<T> {
-    public:
-        Ptr(double* data, ptrdiff_t m, ptrdiff_t n) {
-            // Skip Matrix() ctor to skip allocation
-            this->_data = data;
-            this->_m = m;
-            this->_n = n;
-        }
+// Matrix Pointer -> Ctor / Dtor Does Not Allocate / Deallocate 
+template <BLAS T>
+class Matrix<T>::Ptr : public Matrix<T> {
+public:
+    Ptr(double* data, ptrdiff_t m, ptrdiff_t n) {
+        // Skip Matrix() ctor to skip allocation
+        this->_data = data;
+        this->_m = m;
+        this->_n = n;
+    }
 
-        ~Ptr() {
-            // Empty object so that ~Matrix() doesn't deallocate
-            this->_data = NULL;
-            this->_m = 0;
-            this->_n = 0;
-        }
-    };
+    ~Ptr() {
+        // Empty object so that ~Matrix() doesn't deallocate
+        this->_data = NULL;
+        this->_m = 0;
+        this->_n = 0;
+    }
+};
+
 
 template<BLAS T> int Matrix<T>::__alloc() {
     ptrdiff_t n = this->rows() * this->cols();
