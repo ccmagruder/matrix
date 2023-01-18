@@ -13,7 +13,6 @@ add_library(TestWithLogging SHARED ${CMAKE_SOURCE_DIR}/tests/TestWithLogging.cpp
 target_include_directories(TestWithLogging PUBLIC ${CMAKE_SOURCE_DIR}/tests)
 target_link_libraries(TestWithLogging gtest gtest_main)
 
-
 target_link_libraries(tMatrix Matrix TestWithLogging)
 
 add_test(NAME tMatrix

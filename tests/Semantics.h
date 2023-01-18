@@ -1,4 +1,4 @@
-// Copyright 2022 Caleb Magruder
+// Copyright 2023 Caleb Magruder
 
 #include <utility>  // std::move
 

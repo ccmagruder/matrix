@@ -35,4 +35,15 @@ add_library(Matrix SHARED ${CMAKE_SOURCE_DIR}/src/Matrix.cpp)
 target_include_directories(Matrix PUBLIC
                            ${CMAKE_SOURCE_DIR}/include)
 
+##############################  BLAS: Accelerate  #############################
+
+if (${USE_ACC})
+    find_library(ACC Accelerate)
+    add_library(MatrixACC OBJECT ${CMAKE_SOURCE_DIR}/src/MatrixACC.cpp)
+    target_include_directories(MatrixACC PUBLIC ${CMAKE_SOURCE_DIR}/include
+                                                ${ACC}/Headers)
+    target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixACC>
+                                        "-framework Accelerate")
+endif ()
+
 enable_testing()
