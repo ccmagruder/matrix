@@ -63,5 +63,17 @@ if (${USE_MKL})
   endif ()
 endif ()
 
+###############################  BLAS: OpenBLAS  ##############################
+
+if (${USE_OPB})
+  find_library(OPB openblas HINTS /opt/homebrew/opt/openblas/lib
+                                  /usr/local/opt/openblas/lib)
+  add_library(MatrixOPB OBJECT ${CMAKE_SOURCE_DIR}/src/MatrixOPB.cpp)
+  target_include_directories(MatrixOPB PUBLIC ${CMAKE_SOURCE_DIR}/include
+                                              /opt/homebrew/opt/openblas/include
+                                              /usr/local/opt/openblas/include)
+  target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixOPB>
+                              ${OPB})
+endif ()
 
 enable_testing()
