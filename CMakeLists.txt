@@ -1,6 +1,6 @@
 # Copyright 2023 Caleb Magruder
 
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.21)
 
 project(Matrix)
 
@@ -45,5 +45,23 @@ if (${USE_ACC})
     target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixACC>
                                         "-framework Accelerate")
 endif ()
+
+#################################  BLAS: MKL  #################################
+
+if (${USE_MKL})
+  find_package(MKL QUIET)
+  if (${MKL_FOUND})
+      find_library(MKL mkl_rt HINTS ${MKL_ROOT}/lib)
+      add_library(MatrixMKL OBJECT ${CMAKE_SOURCE_DIR}/src/MatrixMKL.cpp)
+      target_include_directories(MatrixMKL PUBLIC ${CMAKE_SOURCE_DIR}/include
+                                                  ${MKL_ROOT}/include)
+      target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixMKL>
+          ${MKL}
+          ${MKL_THREAD_LIB})
+  else ()
+          message(ERROR "  MKL Not Found. Set -DUSE_MKL=OFF to skip MKL.")
+  endif ()
+endif ()
+
 
 enable_testing()
