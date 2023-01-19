@@ -27,8 +27,11 @@ if (${LINT})
     set(CMAKE_CXX_CPPCHECK "cppcheck;--quiet;--suppress=*:${CMAKE_BINARY_DIR}/*")
 endif (${LINT})
 
-add_subdirectory(extern)
-add_subdirectory(tests)
+# If submodule, skip tests and google test dependency.
+if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
+    add_subdirectory(extern)
+    add_subdirectory(tests)
+endif()
 
 add_library(Matrix SHARED ${CMAKE_SOURCE_DIR}/src/Matrix.cpp)
 
