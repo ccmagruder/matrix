@@ -33,10 +33,14 @@ if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
     add_subdirectory(tests)
 endif()
 
-add_library(Matrix SHARED ${CMAKE_SOURCE_DIR}/src/Matrix.cpp)
+add_library(Matrix SHARED ${CMAKE_SOURCE_DIR}/src/Matrix.cpp
+                          ${CMAKE_SOURCE_DIR}/src/Logger.cpp
+                          ${CMAKE_SOURCE_DIR}/src/TestWithLogging.cpp)
 
 target_include_directories(Matrix PUBLIC
                            ${CMAKE_SOURCE_DIR}/include)
+
+target_link_libraries(Matrix gtest gtest_main)
 
 ##############################  BLAS: Accelerate  #############################
 
