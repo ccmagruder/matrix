@@ -46,8 +46,8 @@ target_link_libraries(Matrix gtest gtest_main)
 
 if (${USE_ACC})
     find_library(ACC Accelerate)
-    add_library(MatrixACC OBJECT ${CMAKE_SOURCE_DIR}/src/MatrixACC.cpp)
-    target_include_directories(MatrixACC PUBLIC ${CMAKE_SOURCE_DIR}/include
+    add_library(MatrixACC OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixACC.cpp)
+    target_include_directories(MatrixACC PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
                                                 ${ACC}/Headers)
     target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixACC>
                                         "-framework Accelerate")
@@ -59,8 +59,8 @@ if (${USE_MKL})
   find_package(MKL QUIET)
   if (${MKL_FOUND})
       find_library(MKL mkl_rt HINTS ${MKL_ROOT}/lib)
-      add_library(MatrixMKL OBJECT ${CMAKE_SOURCE_DIR}/src/MatrixMKL.cpp)
-      target_include_directories(MatrixMKL PUBLIC ${CMAKE_SOURCE_DIR}/include
+      add_library(MatrixMKL OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixMKL.cpp)
+      target_include_directories(MatrixMKL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
                                                   ${MKL_ROOT}/include)
       target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixMKL>
           ${MKL}
@@ -75,8 +75,8 @@ endif ()
 if (${USE_OPB})
   find_library(OPB openblas HINTS /opt/homebrew/opt/openblas/lib
                                   /usr/local/opt/openblas/lib)
-  add_library(MatrixOPB OBJECT ${CMAKE_SOURCE_DIR}/src/MatrixOPB.cpp)
-  target_include_directories(MatrixOPB PUBLIC ${CMAKE_SOURCE_DIR}/include
+  add_library(MatrixOPB OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixOPB.cpp)
+  target_include_directories(MatrixOPB PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
                                               /opt/homebrew/opt/openblas/include
                                               /usr/local/opt/openblas/include)
   target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixOPB>
