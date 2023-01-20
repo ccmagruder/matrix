@@ -13,6 +13,10 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(CMAKE_BUILD_TYPE Debug)
 
+###############################################################################
+############################  Configure Options  ##############################
+###############################################################################
+
 option(LINT "Run cpplint and cppcheck linting" OFF)
 
 option(USE_ACC "BLAS: Apple's Accelerate Framework" OFF)
@@ -27,11 +31,19 @@ if (${LINT})
     set(CMAKE_CXX_CPPCHECK "cppcheck;--quiet;--suppress=*:${CMAKE_BINARY_DIR}/*")
 endif (${LINT})
 
+###############################################################################
+##################################  Tests  ####################################
+###############################################################################
+
 # If submodule, skip tests and google test dependency.
 if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
     add_subdirectory(extern)
     add_subdirectory(tests)
 endif()
+
+###############################################################################
+###############################  Matrix Library  ##############################
+###############################################################################
 
 add_library(Matrix SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/Matrix.cpp
                           ${CMAKE_CURRENT_SOURCE_DIR}/src/Logger.cpp
@@ -66,7 +78,7 @@ if (${USE_MKL})
           ${MKL}
           ${MKL_THREAD_LIB})
   else ()
-          message(ERROR "  MKL Not Found. Set -DUSE_MKL=OFF to skip MKL.")
+          message(FATAL_ERROR "  MKL Not Found. Set -DUSE_MKL=OFF to skip MKL.")
   endif ()
 endif ()
 
@@ -82,5 +94,15 @@ if (${USE_OPB})
   target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixOPB>
                               ${OPB})
 endif ()
+
+###############################################################################
+#############################  Benchmark Profiler  ############################
+###############################################################################
+
+configure_file(src/benchmark.cpp.in src/benchmark.cpp)
+
+add_executable(benchmark ${CMAKE_CURRENT_BINARY_DIR}/src/benchmark.cpp)
+
+target_link_libraries(benchmark Matrix)
 
 enable_testing()

@@ -34,7 +34,7 @@ Specifically, the equality operator `A=B;` can be interpretted at least three di
 1. If the dimensions of `A` and `B` _do not_ match, `A` deallocates, `A` reallocates, `B` copies into `A`. 
 1. `A` deallocates, `B` moves into `A`, `B` is left empty.
 
-Therefore, the equality operator is disabled due to its ambiguity and we develop three distinct syntaxes each of the interpretations above.
+Therefore the equality operator is disabled due to its ambiguity and we develop three distinct syntaxes each of the interpretations above.
 ```
 A = B;             // Error: Matrix<>::operator=() = delete;
 mcopy(B, &A);      // In-place copy; verifies dimensions; no alloc/dealloc

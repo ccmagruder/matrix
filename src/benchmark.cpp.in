@@ -1,0 +1,50 @@
+// Copyright 2023 Caleb Magruder
+
+/*
+Benchmark Matrix Multiply
+
+The benchmark measures wall clock time of multiplying two square matrices.
+    ./benchmark -n100
+*/
+
+#include <chrono>
+#include <iostream>
+#include <string>
+
+#include "Matrix.h"
+
+#cmakedefine01 USE_ACC
+#cmakedefine01 USE_OPB
+#cmakedefine01 USE_MKL
+
+template <BLAS T>
+double timeMatrixSquared(int N) {
+    auto start = std::chrono::high_resolution_clock::now();
+    Matrix<T> A(N, N);
+    Matrix<T> B = A * A;
+    auto end = std::chrono::high_resolution_clock::now();
+    return std::chrono::duration<double>(end - start).count();
+}
+
+int main(int argc, char *argv[]) {
+    // Check Inputs
+    if (argc != 2 || argv[1][0] != '-' || argv[1][1] != 'n') {
+        std::cerr << "Error: benchmark -n100\n";
+        return 1;
+    }
+    int N = std::stoi(argv[1]+2);
+
+    std::cout << "Time to square A(" << N << ", " << N << ") ^ 2 : \n"
+        << "  REF : " << timeMatrixSquared<REF>(N) << " (s)\n"
+    #if USE_ACC
+        << "  ACC : " << timeMatrixSquared<ACC>(N) << " (s)\n"
+    #endif
+    #if USE_MKL
+        << "  MKL : " << timeMatrixSquared<MKL>(N) << " (s)\n"
+    #endif
+    #if USE_OPB
+        << "  OPB : " << timeMatrixSquared<OPB>(N) << " (s)\n"
+    #endif
+        ;
+    return 0;
+}
