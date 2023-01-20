@@ -9,6 +9,10 @@
 #include "OperatorSet.h"
 
 // BLAS Libraries
+// REF : Reference Implementation
+// ACC : Apple Accelerate Framework
+// OPB : OpenBLAS
+// MKL : Intel's Math Kernel Library
 enum BLAS { REF, ACC, OPB, MKL };
 
 // Maps BLAS::MKL to "MKL"
@@ -46,6 +50,17 @@ class Matrix : public OperatorSet<Matrix<T>> {
         return A;
     }
 
+    // Random number generator
+    static double randn() {
+        static std::random_device rd {};
+        static std::mt19937 gen {rd()};
+        static std::normal_distribution<> d{0, 1};
+        return d(gen);
+    }
+
+    // Matrix Pointer -> Ctor / Dtor Does Not Allocate / Deallocate 
+    class Ptr;
+
     // Allocate Memory
     int __alloc();
 
@@ -82,15 +97,6 @@ class Matrix : public OperatorSet<Matrix<T>> {
 
     // Hyperbolic Tangent tanh(&A)
     int __tanh();
-
-    static double randn() {
-        static std::random_device rd {};
-        static std::mt19937 gen {rd()};
-        static std::normal_distribution<> d{0, 1};
-        return d(gen);
-    }
-
-    class Ptr;
 };
 
 // Matrix Pointer -> Ctor / Dtor Does Not Allocate / Deallocate 
