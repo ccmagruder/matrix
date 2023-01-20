@@ -28,8 +28,29 @@ cmake .. -DUSE_ACC=ON -DUSE_MKL=ON -DUSE_OPB=ON
 
 To benchmark the backends after enabling, call the benchmark utility to measure wall clock time to square a matrix.
 ```
-./benchmark -n128 -n256 -n512
+% ./benchmark -n128 -n256 -n512 -n1024
+Time to square A(128, 128) ^ 2 :
+  REF : 0.0814113 (s)
+  ACC : 0.000374977 (s)
+  MKL : 0.0420481 (s)
+  OPB : 0.000198088 (s)
+Time to square A(256, 256) ^ 2 :
+  REF : 0.785238 (s)
+  ACC : 0.00132749 (s)
+  MKL : 0.00103547 (s)
+  OPB : 0.000858252 (s)
+Time to square A(512, 512) ^ 2 :
+  REF : 6.43677 (s)
+  ACC : 0.00891321 (s)
+  MKL : 0.00811567 (s)
+  OPB : 0.00764552 (s)
+Time to square A(1024, 1024) ^ 2 :
+  REF : 67.9423 (s)
+  ACC : 0.0571988 (s)
+  MKL : 0.0576598 (s)
+  OPB : 0.0533165 (s)
 ```
+These benchmark results were generated on an Intel i5 64GB iMac.
 
 # Syntax
 
