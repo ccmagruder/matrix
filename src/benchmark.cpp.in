@@ -28,23 +28,33 @@ double timeMatrixSquared(int N) {
 
 int main(int argc, char *argv[]) {
     // Check Inputs
-    if (argc != 2 || argv[1][0] != '-' || argv[1][1] != 'n') {
-        std::cerr << "Error: benchmark -n100\n";
+    if (argc < 2) {
+        std::cerr << "Error: benchmark -nN\n";
         return 1;
     }
-    int N = std::stoi(argv[1]+2);
+    for (int i = 1; i < argc; i++) {
+        if (argv[i][0] != '-' || argv[i][1] != 'n') {
+            std::cerr << "Error: benchmark -nN\n";
+            return 1;
+        }
+    }
 
-    std::cout << "Time to square A(" << N << ", " << N << ") ^ 2 : \n"
-        << "  REF : " << timeMatrixSquared<REF>(N) << " (s)\n"
-    #if USE_ACC
-        << "  ACC : " << timeMatrixSquared<ACC>(N) << " (s)\n"
-    #endif
-    #if USE_MKL
-        << "  MKL : " << timeMatrixSquared<MKL>(N) << " (s)\n"
-    #endif
-    #if USE_OPB
-        << "  OPB : " << timeMatrixSquared<OPB>(N) << " (s)\n"
-    #endif
-        ;
+    for (int i = 1; i < argc; i++) {
+        int N = std::stoi(argv[i]+2);
+
+        std::cout << "Time to square A(" << N << ", " << N << ") ^ 2 : \n"
+            << "  REF : " << timeMatrixSquared<REF>(N) << " (s)\n";
+        #if USE_ACC
+            std::cout << "  ACC : " << timeMatrixSquared<ACC>(N) << " (s)\n"
+        #endif
+        #if USE_MKL
+            std::cout << "  MKL : " << timeMatrixSquared<MKL>(N) << " (s)\n"
+        #endif
+        #if USE_OPB
+            std::cout << "  OPB : " << timeMatrixSquared<OPB>(N) << " (s)\n"
+        #endif
+            ;
+    }
+
     return 0;
 }

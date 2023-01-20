@@ -26,6 +26,11 @@ To compile with the hardware-accelerator backends append `-DUSE_ACC=ON` to enabl
 cmake .. -DUSE_ACC=ON -DUSE_MKL=ON -DUSE_OPB=ON
 ```
 
+To benchmark the backends after enabling, call the benchmark utility to measure wall clock time to square a matrix.
+```
+./benchmark -n128 -n256 -n512
+```
+
 # Syntax
 
 The Matrix library uses copy and move semantics to prevent unintentional copies and unneccesary mallocs.
