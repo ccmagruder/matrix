@@ -45,15 +45,14 @@ int main(int argc, char *argv[]) {
         std::cout << "Time to square A(" << N << ", " << N << ") ^ 2 : \n"
             << "  REF : " << timeMatrixSquared<REF>(N) << " (s)\n";
         #if USE_ACC
-            std::cout << "  ACC : " << timeMatrixSquared<ACC>(N) << " (s)\n"
+            std::cout << "  ACC : " << timeMatrixSquared<ACC>(N) << " (s)\n";
         #endif
         #if USE_MKL
-            std::cout << "  MKL : " << timeMatrixSquared<MKL>(N) << " (s)\n"
+            std::cout << "  MKL : " << timeMatrixSquared<MKL>(N) << " (s)\n";
         #endif
         #if USE_OPB
-            std::cout << "  OPB : " << timeMatrixSquared<OPB>(N) << " (s)\n"
+            std::cout << "  OPB : " << timeMatrixSquared<OPB>(N) << " (s)\n";
         #endif
-            ;
     }
 
     return 0;
