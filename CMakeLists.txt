@@ -11,8 +11,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-set(CMAKE_BUILD_TYPE Debug)
-
 ###############################################################################
 ############################  Configure Options  ##############################
 ###############################################################################
@@ -32,26 +30,12 @@ if (${LINT})
 endif (${LINT})
 
 ###############################################################################
-##################################  Tests  ####################################
-###############################################################################
-
-# If submodule, skip tests and google test dependency.
-if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
-    add_subdirectory(tests)
-endif()
-
-###############################################################################
 ###############################  Matrix Library  ##############################
 ###############################################################################
 
-add_library(Matrix SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/Matrix.cpp
-                          ${CMAKE_CURRENT_SOURCE_DIR}/src/Logger.cpp
-                          ${CMAKE_CURRENT_SOURCE_DIR}/src/TestWithLogging.cpp)
+add_library(Matrix SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/Matrix.cpp)
 
-target_include_directories(Matrix PUBLIC
-                           ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-target_link_libraries(Matrix gtest gtest_main)
+target_include_directories(Matrix PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 ##############################  BLAS: Accelerate  #############################
 
@@ -93,6 +77,15 @@ if (${USE_OPB})
   target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixOPB>
                               ${OPB})
 endif ()
+
+###############################################################################
+##################################  Tests  ####################################
+###############################################################################
+
+# If submodule, skip tests and google test dependency.
+if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
+    add_subdirectory(tests)
+endif()
 
 ###############################################################################
 #############################  Benchmark Profiler  ############################
