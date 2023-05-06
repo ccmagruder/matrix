@@ -10,10 +10,6 @@
 #include "Semantics.h"
 #include "TestWithLogging.h"
 
-#cmakedefine01 USE_ACC
-#cmakedefine01 USE_OPB
-#cmakedefine01 USE_MKL
-
 /////////////////////////////////////////
 // Helper Functions
 /////////////////////////////////////////
@@ -51,13 +47,13 @@ class tMatrixPtr : public TestWithLogging {};
 
     using MyTypes = ::testing::Types
             < Matrix<REF>
-        #if USE_ACC
+        #if ACC_FOUND
                 ,Matrix<ACC>
         #endif
-        #if USE_OPB
+        #if OPB_FOUND
                 ,Matrix<OPB>
         #endif
-        #if USE_MKL
+        #if MKL_FOUND
                 ,Matrix<MKL>
         #endif
             >;

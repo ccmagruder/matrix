@@ -15,10 +15,6 @@ The benchmark measures wall clock time of multiplying two square matrices.
 
 #include "benchmark/benchmark.h"
 
-#cmakedefine01 USE_ACC
-#cmakedefine01 USE_OPB
-#cmakedefine01 USE_MKL
-
 template <BLAS T>
 void matrixSquared(benchmark::State& state) {
     const int N = state.range(0);
@@ -30,15 +26,15 @@ void matrixSquared(benchmark::State& state) {
 
 BENCHMARK_TEMPLATE(matrixSquared, REF)->Range(4, 256);
 
-#if USE_ACC
+#if ACC_FOUND
 BENCHMARK_TEMPLATE(matrixSquared, ACC)->Range(4, 256);
 #endif
 
-#if USE_OPB
+#if OPB_FOUND
 BENCHMARK_TEMPLATE(matrixSquared, OPB)->Range(4, 256);
 #endif
 
-#if USE_MKL
+#if MKL_FOUND == 1
 BENCHMARK_TEMPLATE(matrixSquared, MKL)->Range(4, 256);
 #endif
 

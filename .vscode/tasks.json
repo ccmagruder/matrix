@@ -40,7 +40,6 @@
                 "-B",
                 "build",
                 "-DCMAKE_BUILD_TYPE=Debug",
-                "-DUSE_OPB=1",
             ],
             "dependsOn": "cmake clean",
         },

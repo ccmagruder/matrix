@@ -14,8 +14,6 @@ target_include_directories(Test PUBLIC ${CMAKE_SOURCE_DIR}/include
 
 target_link_libraries(Test GTest::gtest GTest::gtest_main)
 
-configure_file(tMatrix.cpp.in tMatrix.cpp)
-
 add_executable(tMatrix tMatrix.cpp)
 
 target_link_libraries(tMatrix Matrix Test)

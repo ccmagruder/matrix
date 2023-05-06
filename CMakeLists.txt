@@ -17,12 +17,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 option(LINT "Run cpplint and cppcheck linting" OFF)
 
-option(USE_ACC "BLAS: Apple's Accelerate Framework" OFF)
-
-option(USE_OPB "BLAS: OpenBLAS Library" OFF)
-
-option(USE_MKL "BLAS: Intel's Math Kernel Library" OFF)
-
 if (${LINT})
     # Directory build/ does not need to be linted
     set(CMAKE_CXX_CPPLINT "cpplint;--quiet;--exclude=${CMAKE_BINARY_DIR}/*")
@@ -39,43 +33,42 @@ target_include_directories(Matrix PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 ##############################  BLAS: Accelerate  #############################
 
-if (${USE_ACC})
-    find_library(ACC Accelerate)
+find_library(ACC Accelerate)
+if (ACC)
     add_library(MatrixACC OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixACC.cpp)
     target_include_directories(MatrixACC PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
                                                 ${ACC}/Headers)
     target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixACC>
                                         "-framework Accelerate")
+    target_compile_definitions(Matrix PUBLIC ACC_FOUND)
 endif ()
 
 #################################  BLAS: MKL  #################################
 
-if (${USE_MKL})
-  find_package(MKL QUIET)
-  if (${MKL_FOUND})
-      find_library(MKL mkl_rt HINTS ${MKL_ROOT}/lib)
-      add_library(MatrixMKL OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixMKL.cpp)
-      target_include_directories(MatrixMKL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-                                                  ${MKL_ROOT}/include)
-      target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixMKL>
-          ${MKL}
-          ${MKL_THREAD_LIB})
-  else ()
-          message(FATAL_ERROR "  MKL Not Found. Set -DUSE_MKL=OFF to skip MKL.")
-  endif ()
+find_package(MKL QUIET)
+if (MKL)
+    find_library(MKL mkl_rt HINTS ${MKL_ROOT}/lib)
+    add_library(MatrixMKL OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixMKL.cpp)
+    target_include_directories(MatrixMKL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+                                                ${MKL_ROOT}/include)
+    target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixMKL>
+        ${MKL}
+        ${MKL_THREAD_LIB})
+    target_compile_definitions(Matrix PUBLIC MKL_FOUND)
 endif ()
 
 ###############################  BLAS: OpenBLAS  ##############################
 
-if (${USE_OPB})
-  find_library(OPB openblas HINTS /opt/homebrew/opt/openblas/lib
+find_library(OPB openblas HINTS /opt/homebrew/opt/openblas/lib
                                   /usr/local/opt/openblas/lib)
-  add_library(MatrixOPB OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixOPB.cpp)
-  target_include_directories(MatrixOPB PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-                                              /opt/homebrew/opt/openblas/include
-                                              /usr/local/opt/openblas/include)
-  target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixOPB>
+if (OPB)
+    add_library(MatrixOPB OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixOPB.cpp)
+    target_include_directories(MatrixOPB PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+                                                /opt/homebrew/opt/openblas/include
+                                                /usr/local/opt/openblas/include)
+    target_link_libraries(Matrix $<TARGET_OBJECTS:MatrixOPB>
                               ${OPB})
+    target_compile_definitions(Matrix PUBLIC OPB_FOUND)
 endif ()
 
 ###############################################################################
@@ -93,9 +86,7 @@ endif()
 
 find_package(benchmark REQUIRED)
 
-configure_file(src/benchmark.cpp.in src/benchmark.cpp)
-
-add_executable(benchmark ${CMAKE_CURRENT_BINARY_DIR}/src/benchmark.cpp)
+add_executable(benchmark ${CMAKE_SOURCE_DIR}/src/benchmark.cpp)
 
 target_link_libraries(benchmark Matrix benchmark::benchmark benchmark::benchmark_main)
 

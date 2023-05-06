@@ -21,9 +21,9 @@ cmake --build .
 ctest
 ```
 
-To compile with the hardware-accelerator backends append `-DUSE_ACC=ON` to enable Apple's Accelerate Framework, `-DUSE_MKL=ON` to enable Intel's Math Kernel Library, and `-DUSE_OPB=ON` to enable OpenBLAS. On MacOS with an Intel architecture it is possible to configure cmake with all three backends simultaneously.
+On MacOS with an Intel architecture it is possible to configure cmake with all four backends simultaneously.
 ```
-cmake .. -DUSE_ACC=ON -DUSE_MKL=ON -DUSE_OPB=ON
+cmake ..
 ```
 
 To benchmark the backends after enabling, call the benchmark utility to measure wall clock time to square a matrix.
