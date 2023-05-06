@@ -37,7 +37,6 @@ endif (${LINT})
 
 # If submodule, skip tests and google test dependency.
 if(${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
-    add_subdirectory(extern)
     add_subdirectory(tests)
 endif()
 

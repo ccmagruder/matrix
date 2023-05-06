@@ -18,6 +18,6 @@ RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
     && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
-        vim cmake clang make pip cppcheck git-lfs libopenblas-dev\
+        vim cmake clang make pip cppcheck git-lfs libopenblas-dev libgtest-dev libbenchmark-dev\
     && pip install cpplint \
     && export GTEST_COLOR=1
