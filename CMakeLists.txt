@@ -98,10 +98,12 @@ endif ()
 #############################  Benchmark Profiler  ############################
 ###############################################################################
 
+find_package(benchmark REQUIRED)
+
 configure_file(src/benchmark.cpp.in src/benchmark.cpp)
 
 add_executable(benchmark ${CMAKE_CURRENT_BINARY_DIR}/src/benchmark.cpp)
 
-target_link_libraries(benchmark Matrix)
+target_link_libraries(benchmark Matrix benchmark::benchmark benchmark::benchmark_main)
 
 enable_testing()

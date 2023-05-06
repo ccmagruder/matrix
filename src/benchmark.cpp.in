@@ -13,47 +13,33 @@ The benchmark measures wall clock time of multiplying two square matrices.
 
 #include "Matrix.h"
 
+#include "benchmark/benchmark.h"
+
 #cmakedefine01 USE_ACC
 #cmakedefine01 USE_OPB
 #cmakedefine01 USE_MKL
 
 template <BLAS T>
-double timeMatrixSquared(int N) {
-    auto start = std::chrono::high_resolution_clock::now();
+void matrixSquared(benchmark::State& state) {
+    const int N = state.range(0);
     Matrix<T> A(N, N);
-    Matrix<T> B = A * A;
-    auto end = std::chrono::high_resolution_clock::now();
-    return std::chrono::duration<double>(end - start).count();
+    for (auto _ : state) {
+        Matrix<T> B = A * A;
+    }
 }
 
-int main(int argc, char *argv[]) {
-    // Check Inputs
-    if (argc < 2) {
-        std::cerr << "Error: benchmark -nN\n";
-        return 1;
-    }
-    for (int i = 1; i < argc; i++) {
-        if (argv[i][0] != '-' || argv[i][1] != 'n') {
-            std::cerr << "Error: benchmark -nN\n";
-            return 1;
-        }
-    }
+BENCHMARK_TEMPLATE(matrixSquared, REF)->Range(4, 256);
 
-    for (int i = 1; i < argc; i++) {
-        int N = std::stoi(argv[i]+2);
+#if USE_ACC
+BENCHMARK_TEMPLATE(matrixSquared, ACC)->Range(4, 256);
+#endif
 
-        std::cout << "Time to square A(" << N << ", " << N << ") ^ 2 : \n"
-            << "  REF : " << timeMatrixSquared<REF>(N) << " (s)\n";
-        #if USE_ACC
-            std::cout << "  ACC : " << timeMatrixSquared<ACC>(N) << " (s)\n";
-        #endif
-        #if USE_MKL
-            std::cout << "  MKL : " << timeMatrixSquared<MKL>(N) << " (s)\n";
-        #endif
-        #if USE_OPB
-            std::cout << "  OPB : " << timeMatrixSquared<OPB>(N) << " (s)\n";
-        #endif
-    }
+#if USE_OPB
+BENCHMARK_TEMPLATE(matrixSquared, OPB)->Range(4, 256);
+#endif
 
-    return 0;
-}
+#if USE_MKL
+BENCHMARK_TEMPLATE(matrixSquared, MKL)->Range(4, 256);
+#endif
+
+BENCHMARK_MAIN();
