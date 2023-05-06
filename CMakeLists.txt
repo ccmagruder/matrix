@@ -15,7 +15,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ############################  Configure Options  ##############################
 ###############################################################################
 
-option(LINT "Run cpplint and cppcheck linting" OFF)
+option(LINT "Run cpplint and cppcheck linting" ON)
 
 if (${LINT})
     # Directory build/ does not need to be linted

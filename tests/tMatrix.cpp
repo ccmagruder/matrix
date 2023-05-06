@@ -48,13 +48,13 @@ class tMatrixPtr : public TestWithLogging {};
     using MyTypes = ::testing::Types
             < Matrix<REF>
         #if ACC_FOUND
-                ,Matrix<ACC>
+                , Matrix<ACC>
         #endif
         #if OPB_FOUND
-                ,Matrix<OPB>
+                , Matrix<OPB>
         #endif
         #if MKL_FOUND
-                ,Matrix<MKL>
+                , Matrix<MKL>
         #endif
             >;
 
@@ -328,8 +328,10 @@ TYPED_TEST(tMatrix, Serialize) {
 /////////////////////////////////////////
 TYPED_TEST(tMatrixPtr, Constructor) {
     TypeParam* A = new TypeParam(build2x2<TypeParam>());
-    typename TypeParam::Ptr ptr1(static_cast<double*>(*A), A->rows(), A->cols());
-    typename TypeParam::Ptr* ptr2 = new typename TypeParam::Ptr(static_cast<double*>(*A), A->rows(), A->cols());
+    typename TypeParam::Ptr ptr1(
+        static_cast<double*>(*A), A->rows(), A->cols());
+    typename TypeParam::Ptr* ptr2 = new typename TypeParam::Ptr(
+        static_cast<double*>(*A), A->rows(), A->cols());
     delete ptr2;
     delete A;
 }

@@ -7,7 +7,6 @@ The benchmark measures wall clock time of multiplying two square matrices.
     ./benchmark -n100
 */
 
-#include <chrono>
 #include <iostream>
 #include <string>
 
@@ -16,7 +15,7 @@ The benchmark measures wall clock time of multiplying two square matrices.
 #include "benchmark/benchmark.h"
 
 template <BLAS T>
-void matrixSquared(benchmark::State& state) {
+void matrixSquared(benchmark::State& state) {  // NOLINT
     const int N = state.range(0);
     Matrix<T> A(N, N);
     for (auto _ : state) {

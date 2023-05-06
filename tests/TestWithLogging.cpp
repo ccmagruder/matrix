@@ -9,7 +9,7 @@ TestWithLogging::TestWithLogging() {
         ->current_test_info()->name();
     // in parameterized tests testname is followed by /i
     // which is invalid because _testname is not a directory
-    
+
     // _testname[_testname.find('/')] = '.';
 
     // comes in the form of e.g. tDisplay/tDisplay
