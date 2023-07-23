@@ -12,18 +12,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 ###############################################################################
-############################  Configure Options  ##############################
-###############################################################################
-
-option(LINT "Run cpplint and cppcheck linting" ON)
-
-if (${LINT})
-    # Directory build/ does not need to be linted
-    set(CMAKE_CXX_CPPLINT "cpplint;--quiet;--exclude=${CMAKE_BINARY_DIR}/*")
-    set(CMAKE_CXX_CPPCHECK "cppcheck;--quiet;--suppress=*:${CMAKE_BINARY_DIR}/*")
-endif (${LINT})
-
-###############################################################################
 ###############################  Matrix Library  ##############################
 ###############################################################################
 
@@ -45,8 +33,9 @@ endif ()
 
 #################################  BLAS: MKL  #################################
 
-find_package(MKL QUIET)
-if (MKL)
+find_package(MKL)
+if (MKL_FOUND)
+    # message(FATAL ${MKL_ROOT})
     find_library(MKL mkl_rt HINTS ${MKL_ROOT}/lib)
     add_library(MatrixMKL OBJECT ${CMAKE_CURRENT_SOURCE_DIR}/src/MatrixMKL.cpp)
     target_include_directories(MatrixMKL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -70,6 +59,19 @@ if (OPB)
                               ${OPB})
     target_compile_definitions(Matrix PUBLIC OPB_FOUND)
 endif ()
+
+###############################################################################
+############################  Configure Options  ##############################
+###############################################################################
+
+option(LINT "Run cpplint and cppcheck linting" ON)
+
+if (${LINT})
+    # Directory build/ does not need to be linted
+    set(CMAKE_CXX_CPPLINT "cpplint;--quiet;--exclude=${CMAKE_BINARY_DIR}/*")
+    set(CMAKE_CXX_CPPCHECK "cppcheck;.;--force;--quiet;--suppressions-list=${CMAKE_SOURCE_DIR}/.cppcheck/suppressions.txt")
+endif (${LINT})
+
 
 ###############################################################################
 ##################################  Tests  ####################################
