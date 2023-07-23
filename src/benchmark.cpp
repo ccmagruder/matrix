@@ -2,9 +2,6 @@
 
 /*
 Benchmark Matrix Multiply
-
-The benchmark measures wall clock time of multiplying two square matrices.
-    ./benchmark -n100
 */
 
 #include <iostream>
@@ -33,7 +30,7 @@ BENCHMARK_TEMPLATE(matrixSquared, ACC)->Range(4, 256);
 BENCHMARK_TEMPLATE(matrixSquared, OPB)->Range(4, 256);
 #endif
 
-#if MKL_FOUND == 1
+#if MKL_FOUND
 BENCHMARK_TEMPLATE(matrixSquared, MKL)->Range(4, 256);
 #endif
 

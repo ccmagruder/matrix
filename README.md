@@ -28,29 +28,31 @@ cmake ..
 
 To benchmark the backends after enabling, call the benchmark utility to measure wall clock time to square a matrix.
 ```
-% ./benchmark -n128 -n256 -n512 -n1024
-Time to square A(128, 128) ^ 2 :
-  REF : 0.0814113 (s)
-  ACC : 0.000374977 (s)
-  MKL : 0.0420481 (s)
-  OPB : 0.000198088 (s)
-Time to square A(256, 256) ^ 2 :
-  REF : 0.785238 (s)
-  ACC : 0.00132749 (s)
-  MKL : 0.00103547 (s)
-  OPB : 0.000858252 (s)
-Time to square A(512, 512) ^ 2 :
-  REF : 6.43677 (s)
-  ACC : 0.00891321 (s)
-  MKL : 0.00811567 (s)
-  OPB : 0.00764552 (s)
-Time to square A(1024, 1024) ^ 2 :
-  REF : 67.9423 (s)
-  ACC : 0.0571988 (s)
-  MKL : 0.0576598 (s)
-  OPB : 0.0533165 (s)
+% ./benchmark
+Running build/benchmark
+Run on (10 X 24 MHz CPU s)
+CPU Caches:
+  L1 Data 64 KiB
+  L1 Instruction 128 KiB
+  L2 Unified 4096 KiB (x10)
+Load Average: 2.45, 2.28, 2.11
+-----------------------------------------------------------------
+Benchmark                       Time             CPU   Iterations
+-----------------------------------------------------------------
+matrixSquared<REF>/4         1727 ns         1727 ns       405630
+matrixSquared<REF>/8        11895 ns        11893 ns        58869
+matrixSquared<REF>/64     5434904 ns      5434609 ns          128
+matrixSquared<REF>/256  346896791 ns    346884000 ns            2
+matrixSquared<ACC>/4         79.3 ns         79.3 ns      8752188
+matrixSquared<ACC>/8          156 ns          156 ns      4279723
+matrixSquared<ACC>/64        2396 ns         2395 ns       297782
+matrixSquared<ACC>/256     101849 ns       101848 ns         6877
+matrixSquared<OPB>/4         79.5 ns         79.5 ns      8780402
+matrixSquared<OPB>/8          156 ns          156 ns      4572115
+matrixSquared<OPB>/64        2350 ns         2350 ns       299941
+matrixSquared<OPB>/256     101762 ns       101762 ns         6868
 ```
-These benchmark results were generated on an Intel i5 64GB iMac.
+These benchmark results were generated on an Apple M1 Max 64GB Studio.
 
 # Syntax
 
