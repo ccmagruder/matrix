@@ -1,0 +1,24 @@
+name: Matrix Library Build, Test, Benchmark
+run-name: ${{ github.repository }}/${{ github.ref }} ${{ github.event_name }}
+on: [push]
+jobs:
+  Build-And-Test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Environment
+        run: echo "This job is running on a ${{ runner.os }} server hosted on GitHub."
+      - name: Install Dependencies libgtest-dev libbenchmark-dev
+        run: sudo apt install libgtest-dev libbenchmark-dev cpplint cppcheck libopenblas-dev
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: List files in the repository
+        run: ls ${{ github.workspace }}
+      - name: CMake Configure
+        run: mkdir build && cmake -B build .
+      - name: CMake Build
+        run: cmake --build build
+      - name: CTest
+        run: ctest
+      - name: Benchmark
+        run: build/benchmark
+
