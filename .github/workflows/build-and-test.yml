@@ -3,22 +3,34 @@ run-name: ${{ github.repository }}/${{ github.ref }} ${{ github.event_name }}
 on: [push]
 jobs:
   Build-And-Test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        release: [Release, Debug]
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Print Environment
         run: echo "This job is running on a ${{ runner.os }} server hosted on GitHub."
-      - name: Install Dependencies libgtest-dev libbenchmark-dev
-        run: sudo apt install libgtest-dev libbenchmark-dev cpplint cppcheck libopenblas-dev
+      - name: Install Dependencies
+        uses: ferki/os-specific-run@nodejs_version
+        with:
+          macos: brew install googletest google-benchmark cpplint cppcheck
+          linux: sudo apt install libgtest-dev libbenchmark-dev cpplint cppcheck libopenblas-dev
       - name: Check out repo
         uses: actions/checkout@v3
       - name: List files in the repository
         run: ls ${{ github.workspace }}
       - name: CMake Configure
-        run: mkdir build && cmake -B build .
+        run: mkdir build && cmake -DCMAKE_BUILD_TYPE=${{ matrix.release }} -B build .
       - name: CMake Build
         run: cmake --build build
       - name: CTest
         run: ctest
       - name: Benchmark
-        run: build/benchmark
+        run: build/benchmark --benchmark_out=benchmark-${{ runner.os }}-${{ matrix.release }}.json
+      - name: Upload Artifact benchmark.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-${{ runner.os }}-${{ matrix.release }}.json
+          path: benchmark-${{ runner.os }}-${{ matrix.release }}.json
 
